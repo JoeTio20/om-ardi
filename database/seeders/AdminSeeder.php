@@ -10,14 +10,14 @@ class AdminSeeder extends Seeder
 {
     public function run(): void
     {
-        if (DB::table('admins')->where('email', 'admin@sarangburung.com')->doesntExist()) {
-            DB::table('admins')->insert([
+        DB::table('admins')->updateOrInsert(
+            ['email' => 'tionatajoe@gmail.com'],
+            [
                 'name'       => 'JOE',
-                'email'      => 'tionatajoe@gmail.com',
-                'password'   => Hash::make('joe123'),
+                'password'   => Hash::make('passwordKamu'),
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]);
-        }
+            ]
+        );
     }
 }
