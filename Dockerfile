@@ -12,14 +12,19 @@ COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
 
-# Buat .env dari .env.example supaya Laravel bisa boot
-RUN cp .env.example .env && php artisan key:generate
+# Setup .env
+RUN cp .env.example .env \
+    && sed -i 's/APP_ENV=local/APP_ENV=production/' .env \
+    && sed -i 's/APP_DEBUG=true/APP_DEBUG=false/' .env \
+    && sed -i 's/SESSION_DRIVER=database/SESSION_DRIVER=file/' .env \
+    && php artisan key:generate
 
-RUN chmod -R 775 storage bootstrap/cache
+# Create SQLite database
+RUN mkdir -p database && touch database/database.sqlite
 
-# Script startup
-RUN echo '#!/bin/sh\nphp artisan config:clear\nphp artisan migrate --force\nphp artisan serve --host=0.0.0.0 --port=${PORT:-8000}' > /app/start.sh && chmod +x /app/start.sh
+# Set permissions
+RUN chmod -R 775 storage bootstrap/cache database
 
 EXPOSE 8000
 
-CMD ["/bin/sh", "/app/start.sh"]
+CMD ["sh", "-c", "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8000}"]
