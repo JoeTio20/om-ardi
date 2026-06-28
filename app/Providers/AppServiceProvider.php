@@ -19,6 +19,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Force HTTPS di production (Railway, dll)
+    if (config('app.env') === 'production' || 
+        str_contains(request()->getHttpHost(), 'railway') ||
+        str_contains(request()->getHttpHost(), 'ngrok')) {
+        \URL::forceScheme('https');//
     }
+}
 }
