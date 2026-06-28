@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: goldenfish-birdnest
+    runtime: docker
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_URL
+        sync: false
