@@ -6,30 +6,24 @@ RUN apt-get update && apt-get install -y \
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-WORKDIR /app
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
+WORKDIR /app
 COPY . .
 
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader --prefer-source
 
-# Setup environment
 RUN cp .env.example .env \
-    && sed -i 's/APP_ENV=local/APP_ENV=production/' .env \
-    && sed -i 's/APP_DEBUG=true/APP_DEBUG=false/' .env \
-    && sed -i 's/SESSION_DRIVER=database/SESSION_DRIVER=file/' .env \
-    && sed -i 's/CACHE_STORE=database/CACHE_STORE=file/' .env \
-    && sed -i 's/QUEUE_CONNECTION=database/QUEUE_CONNECTION=sync/' .env \
+    && sed -i 's/APP_ENV=.*/APP_ENV=production/' .env \
+    && sed -i 's/APP_DEBUG=.*/APP_DEBUG=false/' .env \
+    && sed -i 's/SESSION_DRIVER=.*/SESSION_DRIVER=file/' .env \
     && php artisan key:generate
 
-# Create SQLite database and run migrations
-RUN mkdir -p database \
-    && touch database/database.sqlite \
-    && php artisan migrate --force
+RUN mkdir -p database && touch database/database.sqlite
+RUN chmod -R 775 storage bootstrap/cache database
 
-# Set permissions
-RUN chmod -R 777 storage bootstrap/cache database
+RUN php artisan migrate --force
+RUN php artisan db:seed --force
 
 EXPOSE 8000
-
-# Pakai PHP built-in server langsung (lebih stabil dari artisan serve)
-CMD ["sh", "-c", "php -S 0.0.0.0:${PORT:-8000} -t public public/index.php"]
+CMD ["sh", "-c", "php -S 0.0.0.0:$PORT -t public"]
