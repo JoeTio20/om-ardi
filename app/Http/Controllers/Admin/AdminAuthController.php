@@ -23,19 +23,16 @@ class AdminAuthController extends Controller
             'password' => 'required',
         ]);
 
-        // Cek apakah email ada di database
         $admin = Admin::where('email', $request->email)->first();
 
         if (!$admin) {
             return back()->withInput()->with('error_type', 'email');
         }
 
-        // Cek password
         if (!Hash::check($request->password, $admin->password)) {
             return back()->withInput()->with('error_type', 'password');
         }
 
-        // Login berhasil
         Session::put('admin_logged_in', true);
         Session::put('admin_name', $admin->name);
         return redirect()->route('admin.dashboard');

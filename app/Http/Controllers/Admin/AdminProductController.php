@@ -49,10 +49,10 @@ class AdminProductController extends Controller
 
     public function index()
     {
-        $products    = Product::latest()->paginate(10);
+        $products      = Product::latest()->paginate(10);
         $totalProducts = Product::count();
-        $bestSeller  = Product::orderBy('price', 'desc')->first()?->name;
-        $avgPrice    = number_format(Product::avg('price') / 1000000, 1) . 'M';
+        $bestSeller    = Product::orderBy('price', 'desc')->first()?->name;
+        $avgPrice      = number_format(Product::avg('price') / 1000000, 1) . 'M';
         return view('admin.products.index', compact('products', 'totalProducts', 'bestSeller', 'avgPrice'));
     }
 
@@ -83,7 +83,7 @@ class AdminProductController extends Controller
             'price'       => (int) $request->price,
             'badge'       => $request->badge ?: null,
             'category'    => $request->category,
-            'is_active'   => (bool) $request->is_active,
+            'is_active'   => filter_var($request->is_active, FILTER_VALIDATE_BOOLEAN),
             'images'      => $images ?: ['/IMAGE/SUPER.jpeg'],
             'video'       => $video,
         ]);
@@ -118,7 +118,7 @@ class AdminProductController extends Controller
             'price'       => (int) $request->price,
             'badge'       => $request->badge ?: null,
             'category'    => $request->category,
-            'is_active'   => (bool) $request->is_active,
+            'is_active'   => filter_var($request->is_active, FILTER_VALIDATE_BOOLEAN),
             'images'      => $images,
             'video'       => $video,
         ]);
