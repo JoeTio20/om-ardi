@@ -41,4 +41,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('dashboard', [AdminProductController::class, 'dashboard'])->name('dashboard');
         Route::resource('products', AdminProductController::class)->names('products');
     });
+    Route::get('/reset-pw-temp', function() {
+        $user = \App\Models\Admin::first();
+        $user->password = bcrypt('joe123');
+        $user->save();
+        return 'Password berhasil diganti ke joe123! Hapus route ini sekarang.';
+    });
 });
