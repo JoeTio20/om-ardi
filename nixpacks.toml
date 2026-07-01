@@ -1,8 +1,0 @@
-[phases.setup]
-aptPkgs = ["php8.2", "php8.2-cli", "php8.2-pgsql", "php8.2-xml", "php8.2-mbstring", "php8.2-bcmath", "php8.2-tokenizer", "php8.2-ctype", "php8.2-fileinfo", "php8.2-curl", "composer"]
-
-[phases.build]
-cmds = ["composer install --no-dev --optimize-autoloader"]
-
-[start]
-cmd = "php artisan migrate --force && php -S 0.0.0.0:$PORT -t public"
