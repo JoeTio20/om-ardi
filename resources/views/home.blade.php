@@ -63,7 +63,7 @@
         <h3 class="font-serif text-sm md:text-base mb-1">{{ $p->name }}</h3>
         <div class="flex justify-between items-center">
           <p class="text-[9px] tracking-widest uppercase text-gray-400 hidden md:block">Sarang Burung</p>
-          <p class="text-sm text-gray-700">Rp {{ number_format(\$p->price,0,'.',',') }}</p>
+          <p class="text-sm text-gray-700">Rp {{ number_format($p->price,0,'.',',') }}</p>
         </div>
       </div>
 @endforeach
