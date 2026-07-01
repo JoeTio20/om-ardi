@@ -9,10 +9,10 @@
     <a href="{{ route('product') }}" class="text-[10px] tracking-[.15em] uppercase px-5 py-3 border-b-2 font-semibold {{ request('category') ? 'border-transparent text-gray-400' : 'border-gray-900 text-gray-900' }}">
       {{ __('messages.prod_all') }}
     </a>
-    <a href="{{ route('product') }}?category=super" class="text-[10px] tracking-[.15em] uppercase px-5 py-3 border-b-2 font-semibold {{ request('category')==='super' ? 'border-gray-900 text-gray-900' : 'border-transparent text-gray-400' }}">
+    <a href="{{ route('product') }}?category=super" class="text-[10px] tracking-[.15em] uppercase px-5 py-3 border-b-2 font-semibold {{ request('category')=='super' ? 'border-gray-900 text-gray-900' : 'border-transparent text-gray-400' }}">
       {{ __('messages.prod_cat1') }}
     </a>
-    <a href="{{ route('product') }}?category=patahan" class="text-[10px] tracking-[.15em] uppercase px-5 py-3 border-b-2 font-semibold {{ request('category')==='patahan' ? 'border-gray-900 text-gray-900' : 'border-transparent text-gray-400' }}">
+    <a href="{{ route('product') }}?category=patahan" class="text-[10px] tracking-[.15em] uppercase px-5 py-3 border-b-2 font-semibold {{ request('category')=='patahan' ? 'border-gray-900 text-gray-900' : 'border-transparent text-gray-400' }}">
       {{ __('messages.prod_cat2') }}
     </a>
   </div>
@@ -39,7 +39,7 @@
           <h3 class="font-serif text-sm md:text-base font-normal truncate">{{ $p->name }}</h3>
           <p class="text-[9px] tracking-widest uppercase text-gray-400">Sarang Burung</p>
         </div>
-        <p class="text-sm text-gray-700 flex-shrink-0">Rp {{ number_format(\$p->price,0,'.',',') }}</p>
+        <p class="text-sm text-gray-700 flex-shrink-0">Rp {{ number_format($p->price,0,'.',',') }}</p>
       </div>
     </div>
 @endforeach

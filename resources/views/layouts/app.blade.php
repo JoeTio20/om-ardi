@@ -45,8 +45,8 @@ body { font-family: "Inter", sans-serif; background:#fff; color:#1A1A18; margin:
       </a>
     </nav>
     <div class="flex items-center gap-4">
-      <a href="{{ route('lang.switch', app()->getLocale()==='en'?'id':'en'') }}" class="text-[10px] tracking-widest font-semibold text-gray-400 hover:text-gray-800 transition">
-        {{ app()->getLocale()==='en'?'ID':'EN' }}
+      <a href="{{ route('lang.switch', app()->getLocale()=='en'?'id':'en') }}" class="text-[10px] tracking-widest font-semibold text-gray-400 hover:text-gray-800 transition">
+        {{ app()->getLocale()=='en'?'ID':'EN' }}
       </a>
       <a href="{{ route('cart.index') }}" class="relative" id="cart-icon">
         <svg width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>

@@ -27,7 +27,7 @@
       <svg width="80" height="80" viewBox="0 0 24 24" fill="white"><path d="M2 20s3-3 7-3 7 3 12 3"/><circle cx="12" cy="7" r="3" fill="white"/><path d="M12 10v7" stroke="white" stroke-width="2"/><path d="M9 20a4 4 0 01-4-4" stroke="white" stroke-width="2"/><path d="M15 20a4 4 0 004-4" stroke="white" stroke-width="2"/></svg>
     </div>
     <p class="text-[10px] tracking-widest font-bold uppercase mb-1" style="color:rgba(255,255,255,.5)">AVERAGE VALUE</p>
-    <p class="text-3xl font-bold text-white mb-2">Rp {{ number_format(\$avgPrice,0,'.',',') }}</p>
+    <p class="text-3xl font-bold text-white mb-2">Rp {{ number_format($avgPrice,0,'.',',') }}</p>
     <p class="text-xs mb-4" style="color:rgba(255,255,255,.5)">Rata-rata harga produk aktif</p>
     <div class="grid grid-cols-2 gap-3 pt-4" style="border-top:1px solid rgba(255,255,255,.1)">
       <div>
@@ -57,12 +57,12 @@
         <div class="flex-1 min-w-0">
           <div class="flex justify-between items-start gap-2 mb-1">
             <p class="serif text-base font-bold text-[#0D1F3C] leading-tight">{{ $p->name }}</p>
-            <span class="text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 rounded flex-shrink-0 {{ \$p->is_active ? 'bg-amber-50 text-amber-600' : 'bg-gray-100 text-gray-400' }}">
-              {{ \$p->is_active ? 'AKTIF' : 'NON-AKTIF' }}
+            <span class="text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 rounded flex-shrink-0 {{ $p->is_active ? 'bg-amber-50 text-amber-600' : 'bg-gray-100 text-gray-400' }}">
+              {{ $p->is_active ? 'AKTIF' : 'NON-AKTIF' }}
             </span>
           </div>
-          <p class="text-xs text-[#94A3B8] mb-1">{{ \$p->sku??'#SB-'.str_pad(\$p->id,3,'0',STR_PAD_LEFT) }}</p>
-          <p class="text-base font-bold text-[#0D1F3C]">Rp {{ number_format(\$p->price,0,'.',',') }}</p>
+          <p class="text-xs text-[#94A3B8] mb-1">{{ $p->sku??'#SB-'.str_pad($p->id,3,'0',STR_PAD_LEFT) }}</p>
+          <p class="text-base font-bold text-[#0D1F3C]">Rp {{ number_format($p->price,0,'.',',') }}</p>
         </div>
       </div>
 

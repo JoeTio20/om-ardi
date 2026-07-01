@@ -66,13 +66,13 @@
       </div>
       <div class="flex-1 min-w-0">
         <p class="serif text-[15px] font-bold text-[#0D1F3C] truncate">{{ $p->name }}</p>
-        <p class="text-xs text-[#94A3B8] truncate">{{ Str::limit(\$p->description??'Sarang Burung',28) }}</p>
+        <p class="text-xs text-[#94A3B8] truncate">{{ Str::limit($p->description??'Sarang Burung',28) }}</p>
       </div>
       <div class="flex flex-col items-end gap-1.5">
-        <span class="text-[9px] font-bold tracking-widest uppercase px-2 py-1 rounded {{ \$p->is_active ? 'bg-amber-50 text-amber-700' : 'bg-gray-100 text-gray-400' }}">
-          {{ \$p->is_active ? 'ACTIVE' : 'INACTIVE' }}
+        <span class="text-[9px] font-bold tracking-widest uppercase px-2 py-1 rounded {{ $p->is_active ? 'bg-amber-50 text-amber-700' : 'bg-gray-100 text-gray-400' }}">
+          {{ $p->is_active ? 'ACTIVE' : 'INACTIVE' }}
         </span>
-        <p class="text-sm font-semibold text-[#0D1F3C]">Rp {{ number_format(\$p->price,0,'.',',') }}</p>
+        <p class="text-sm font-semibold text-[#0D1F3C]">Rp {{ number_format($p->price,0,'.',',') }}</p>
       </div>
     </div>
 @endforeach
