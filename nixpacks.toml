@@ -1,5 +1,5 @@
 [phases.setup]
-nixPkgs = ["php82", "php82Extensions.pdo", "php82Extensions.pdo_pgsql", "php82Extensions.mbstring", "php82Extensions.xml", "php82Extensions.tokenizer", "php82Extensions.bcmath", "php82Extensions.ctype", "php82Extensions.fileinfo", "composer"]
+aptPkgs = ["php8.2", "php8.2-cli", "php8.2-pgsql", "php8.2-xml", "php8.2-mbstring", "php8.2-bcmath", "php8.2-tokenizer", "php8.2-ctype", "php8.2-fileinfo", "php8.2-curl", "composer"]
 
 [phases.build]
 cmds = ["composer install --no-dev --optimize-autoloader"]
