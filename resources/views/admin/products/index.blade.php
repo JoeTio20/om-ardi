@@ -1,136 +1,97 @@
 @extends('admin.layout')
-@section('title','Inventory')
-@section('header','Manajemen Produk')
-@section('topbar-actions')
-  <a href="{{ route('admin.products.create') }}" style="display:flex;align-items:center;gap:6px;background:#2C1810;color:#fff;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:10px 20px;border-radius:8px;text-decoration:none;">
-    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-    Tambah Produk
-  </a>
-@endsection
+@section('title','Inventory - Admin')
 @section('content')
 
-<!-- Table Card -->
-<div style="background:#fff;border-radius:12px;border:1px solid #EDE5DC;overflow:hidden;margin-bottom:20px;">
-
-  <!-- Card Header -->
-  <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid #F0E9E0;">
-    <h2 style="font-size:15px;font-weight:600;color:#2C1810;">Daftar Produk</h2>
-    <div style="position:relative;">
-      <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);" width="14" height="14" fill="none" stroke="#A08070" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input id="searchInput" oninput="filterProducts()" placeholder="Cari produk..." style="border:1px solid #EDE5DC;border-radius:8px;padding:8px 12px 8px 32px;font-size:13px;color:#2C1810;outline:none;width:220px;background:#FAF7F4;">
-    </div>
+<div class="px-5 pt-6 pb-3 flex items-center justify-between">
+  <div>
+    <h1 class="serif text-2xl font-bold text-[#0D1F3C]">Inventory</h1>
+    <p class="text-[10px] tracking-widest uppercase text-[#94A3B8] font-semibold">Maritime Admin</p>
   </div>
-
-  <!-- Table -->
-  <table style="width:100%;border-collapse:collapse;" id="productTable">
-    <thead>
-      <tr style="background:#FAF7F4;">
-        <th style="padding:12px 24px;text-align:left;font-size:10.5px;font-weight:600;color:#A08070;letter-spacing:.1em;text-transform:uppercase;">Foto</th>
-        <th style="padding:12px 16px;text-align:left;font-size:10.5px;font-weight:600;color:#A08070;letter-spacing:.1em;text-transform:uppercase;">Nama Produk</th>
-        <th style="padding:12px 16px;text-align:left;font-size:10.5px;font-weight:600;color:#A08070;letter-spacing:.1em;text-transform:uppercase;">Harga</th>
-        <th style="padding:12px 16px;text-align:left;font-size:10.5px;font-weight:600;color:#A08070;letter-spacing:.1em;text-transform:uppercase;">Badge</th>
-        <th style="padding:12px 16px;text-align:left;font-size:10.5px;font-weight:600;color:#A08070;letter-spacing:.1em;text-transform:uppercase;">Status</th>
-        <th style="padding:12px 24px;text-align:right;font-size:10.5px;font-weight:600;color:#A08070;letter-spacing:.1em;text-transform:uppercase;">Aksi</th>
-      </tr>
-    </thead>
-    <tbody>
-      @forelse($products as $p)
-      <tr style="border-top:1px solid #F5EFE8;transition:background .1s;" onmouseover="this.style.background='#FAF7F4'" onmouseout="this.style.background='#fff'" class="product-row" data-name="{{ strtolower($p->name) }}">
-        <td style="padding:14px 24px;">
-          <img src="{{ $p->thumbnail }}" style="width:52px;height:52px;object-fit:cover;border-radius:8px;border:1px solid #EDE5DC;">
-        </td>
-        <td style="padding:14px 16px;">
-          <p style="font-size:14px;font-weight:500;color:#2C1810;margin-bottom:2px;">{{ $p->name }}</p>
-          <p style="font-size:12px;color:#A08070;max-width:320px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">{{ $p->description }}</p>
-        </td>
-        <td style="padding:14px 16px;">
-          <p style="font-size:11px;color:#A08070;">Rp</p>
-          <p style="font-size:14px;font-weight:600;color:#2C1810;">{{ number_format($p->price,0,',','.') }}</p>
-        </td>
-        <td style="padding:14px 16px;">
-          @if($p->badge === 'new')
-            <span class="badge-new">NEW</span>
-          @elseif($p->badge === 'limited')
-            <span class="badge-limited">LIMITED</span>
-          @else
-            <span style="color:#D0C4B8;font-size:13px;">&mdash;</span>
-          @endif
-        </td>
-        <td style="padding:14px 16px;">
-          @if($p->is_active)
-            <span style="display:flex;align-items:center;gap:5px;font-size:13px;color:#2C1810;">
-              <span style="width:7px;height:7px;border-radius:50%;background:#22C55E;display:inline-block;"></span>Aktif
-            </span>
-          @else
-            <span style="display:flex;align-items:center;gap:5px;font-size:13px;color:#A08070;">
-              <span style="width:7px;height:7px;border-radius:50%;background:#D1D5DB;display:inline-block;"></span>Nonaktif
-            </span>
-          @endif
-        </td>
-        <td style="padding:14px 24px;text-align:right;">
-          <a href="{{ route('admin.products.edit',$p->id) }}" style="font-size:13px;font-weight:500;color:#6B5B4E;text-decoration:none;margin-right:12px;">Edit</a>
-          <form method="POST" action="{{ route('admin.products.destroy',$p->id) }}" style="display:inline;" onsubmit="return confirm('Yakin hapus produk ini?')">
-            @csrf @method('DELETE')
-            <button style="font-size:13px;font-weight:500;color:#E53E3E;background:none;border:none;cursor:pointer;">Hapus</button>
-          </form>
-        </td>
-      </tr>
-      @empty
-      <tr><td colspan="6" style="padding:48px;text-align:center;color:#A08070;font-size:13px;">Belum ada produk.</td></tr>
-      @endforelse
-    </tbody>
-  </table>
-
-  <!-- Footer -->
-  <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-top:1px solid #F0E9E0;">
-    <p style="font-size:12px;color:#A08070;">Menampilkan {{ $products->count() }} dari {{ $products->total() }} Produk</p>
-    <div style="display:flex;gap:4px;align-items:center;">
-      {{ $products->previousPageUrl() ? '<a href='.json_encode($products->previousPageUrl())." style='display:flex;align-items:center;justify-content:center;width:30px;height:30px;border:1px solid #EDE5DC;border-radius:6px;color:#6B5B4E;text-decoration:none;'>&lsaquo;</a>" : '' }}
-      @foreach($products->getUrlRange(1, $products->lastPage()) as $page => $url)
-        <a href="{{ $url }}" style="display:flex;align-items:center;justify-content:center;width:30px;height:30px;border:1px solid #EDE5DC;border-radius:6px;font-size:13px;text-decoration:none;{{ $page == $products->currentPage() ? 'background:#2C1810;color:#fff;border-color:#2C1810;' : 'color:#6B5B4E;' }}">{{ $page }}</a>
-      @endforeach
-      {{ $products->nextPageUrl() ? '<a href='.json_encode($products->nextPageUrl())." style='display:flex;align-items:center;justify-content:center;width:30px;height:30px;border:1px solid #EDE5DC;border-radius:6px;color:#6B5B4E;text-decoration:none;'>&rsaquo;</a>" : '' }}
+  <div class="flex gap-2">
+    <button onclick="document.getElementById('srch').classList.toggle('hidden')" class="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm">
+      <svg width="18" height="18" fill="none" stroke="#0D1F3C" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+    <a href="{{ route('admin.products.create') }}" class="w-10 h-10 bg-[#0D1F3C] rounded-xl flex items-center justify-center shadow-sm">
+      <svg width="18" height="18" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    </a>
+  </div>
+</div>
+<div id="srch" class="hidden px-5 pb-3">
+  <input type="text" placeholder="Cari nama produk atau SKU..." class="w-full bg-white border border-gray-100 rounded-xl px-4 py-3 text-sm outline-none shadow-sm focus:border-[#0D1F3C]" oninput="filterCards(this.value)">
+</div>
+@if(session("success"))<div class="mx-5 mb-3 flex items-center gap-2 bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-xl"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>{{ session("success") }}</div>@endif
+<!-- DARK STATS BANNER -->
+<div class="mx-5 mb-5 rounded-2xl overflow-hidden" style="background:#0D1F3C">
+  <div class="relative p-5">
+    <div class="absolute right-4 top-3 opacity-10">
+      <svg width="80" height="80" viewBox="0 0 24 24" fill="white"><path d="M2 20s3-3 7-3 7 3 12 3"/><circle cx="12" cy="7" r="3" fill="white"/><path d="M12 10v7" stroke="white" stroke-width="2"/><path d="M9 20a4 4 0 01-4-4" stroke="white" stroke-width="2"/><path d="M15 20a4 4 0 004-4" stroke="white" stroke-width="2"/></svg>
+    </div>
+    <p class="text-[10px] tracking-widest font-bold uppercase mb-1" style="color:rgba(255,255,255,.5)">AVERAGE VALUE</p>
+    <p class="text-3xl font-bold text-white mb-2">Rp {{ number_format(\$avgPrice,0,'.',',') }}</p>
+    <p class="text-xs mb-4" style="color:rgba(255,255,255,.5)">Rata-rata harga produk aktif</p>
+    <div class="grid grid-cols-2 gap-3 pt-4" style="border-top:1px solid rgba(255,255,255,.1)">
+      <div>
+        <p class="text-[9px] tracking-widest font-bold uppercase mb-1" style="color:rgba(255,255,255,.4)">TOTAL SKU</p>
+        <p class="text-base font-bold text-white">{{ $totalProducts }} Items</p>
+      </div>
+      <div>
+        <p class="text-[9px] tracking-widest font-bold uppercase mb-1" style="color:rgba(255,255,255,.4)">AKTIF</p>
+        <p class="text-base font-bold text-white">{{ $activeProducts }} Produk</p>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- Stats Cards -->
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
-  <div style="background:#fff;border-radius:12px;border:1px solid #EDE5DC;padding:20px;display:flex;align-items:center;gap:14px;">
-    <div style="width:40px;height:40px;background:#F5EFE8;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-      <svg width="18" height="18" fill="none" stroke="#8B6914" stroke-width="1.7" viewBox="0 0 24 24"><path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
-    </div>
-    <div>
-      <p style="font-size:11px;color:#A08070;font-weight:500;letter-spacing:.04em;">Total SKU</p>
-      <p style="font-size:17px;font-weight:600;color:#2C1810;margin-top:2px;">{{ $totalProducts }} Produk</p>
-    </div>
+<!-- PRODUCT LIST -->
+<div class="px-5">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="serif text-xl font-bold text-[#0D1F3C]">Katalog Produk</h2>
   </div>
-  <div style="background:#fff;border-radius:12px;border:1px solid #EDE5DC;padding:20px;display:flex;align-items:center;gap:14px;">
-    <div style="width:40px;height:40px;background:#F5EFE8;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-      <svg width="18" height="18" fill="none" stroke="#8B6914" stroke-width="1.7" viewBox="0 0 24 24"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+  <div class="space-y-3" id="product-list">
+@foreach($products as $p)
+    <div class="card product-item" data-name="{{ strtolower($p->name) }}">
+      <div class="flex gap-4 items-start mb-3">
+        <div class="w-16 h-16 rounded-xl overflow-hidden bg-[#F1F5F9] flex-shrink-0">
+          <img src="{{ $p->thumbnail }}" alt="{{ $p->name }}" class="w-full h-full object-cover" onerror="this.src='/IMAGE/SUPER.jpeg'">
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex justify-between items-start gap-2 mb-1">
+            <p class="serif text-base font-bold text-[#0D1F3C] leading-tight">{{ $p->name }}</p>
+            <span class="text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 rounded flex-shrink-0 {{ \$p->is_active ? 'bg-amber-50 text-amber-600' : 'bg-gray-100 text-gray-400' }}">
+              {{ \$p->is_active ? 'AKTIF' : 'NON-AKTIF' }}
+            </span>
+          </div>
+          <p class="text-xs text-[#94A3B8] mb-1">{{ \$p->sku??'#SB-'.str_pad(\$p->id,3,'0',STR_PAD_LEFT) }}</p>
+          <p class="text-base font-bold text-[#0D1F3C]">Rp {{ number_format(\$p->price,0,'.',',') }}</p>
+        </div>
+      </div>
+
+      <div class="flex gap-3 pt-3" style="border-top:1px solid #F1F5F9">
+        <a href="{{ route('admin.products.edit') }}/{{'.'$p->id.'.'}" class="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#F8FAFC] text-[#0D1F3C] text-[11px] font-semibold tracking-wide uppercase hover:bg-[#EEF2F7] transition">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          EDIT
+        </a>
+        <form method="POST" action="{{ route('admin.products.destroy') }}/{{'.'$p->id.''}" onsubmit="return confirm('Hapus produk ini?')"> @csrf @method('DELETE')
+          <button type="submit" class="w-11 h-10 flex items-center justify-center bg-red-50 text-red-500 rounded-xl hover:bg-red-100 transition">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          </button>
+        </form>
+      </div>
     </div>
-    <div>
-      <p style="font-size:11px;color:#A08070;font-weight:500;letter-spacing:.04em;">Best Seller</p>
-      <p style="font-size:17px;font-weight:600;color:#2C1810;margin-top:2px;">{{ $bestSeller ?? 'N/A' }}</p>
-    </div>
-  </div>
-  <div style="background:#fff;border-radius:12px;border:1px solid #EDE5DC;padding:20px;display:flex;align-items:center;gap:14px;">
-    <div style="width:40px;height:40px;background:#F5EFE8;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-      <svg width="18" height="18" fill="none" stroke="#8B6914" stroke-width="1.7" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-    </div>
-    <div>
-      <p style="font-size:11px;color:#A08070;font-weight:500;letter-spacing:.04em;">Average Value</p>
-      <p style="font-size:17px;font-weight:600;color:#2C1810;margin-top:2px;">Rp {{ $avgPrice ?? '0' }}</p>
-    </div>
+@endforeach
   </div>
 </div>
 
+<!-- FAB -->
+<a href="{{ route('admin.products.create') }}" class="fixed bottom-20 right-5 w-14 h-14 bg-[#0D1F3C] text-white rounded-full flex items-center justify-center shadow-xl z-30 hover:opacity-90 transition">
+  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+</a>
+@section('scripts')
 <script>
-function filterProducts() {
-  const q = document.getElementById('searchInput').value.toLowerCase();
-  document.querySelectorAll('.product-row').forEach(row => {
-    row.style.display = row.dataset.name.includes(q) ? '' : 'none';
+function filterCards(q){
+  document.querySelectorAll('.product-item').forEach(card=>{
+    card.style.display = card.dataset.name.includes(q.toLowerCase()) ? 'block' : 'none';
   });
 }
 </script>
-@endsection
+@endsection@endsection
