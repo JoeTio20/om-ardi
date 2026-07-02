@@ -39,14 +39,17 @@ class AdminProductController extends Controller
 
     public function dashboard()
     {
-        $totalProducts  = Product::count();
-        $activeProducts = Product::where('is_active', true)->count();
-        $latestProducts = Product::latest()->take(5)->get();
-        $avgPrice       = Product::avg('price');
-        $bestSeller     = Product::first()?->name;
-        return view('admin.dashboard', compact('totalProducts', 'activeProducts', 'latestProducts', 'avgPrice', 'bestSeller'));
+        $totalProducts    = Product::count();
+        $activeProducts   = Product::where('is_active', true)->count();
+        $inactiveProducts = Product::where('is_active', false)->count(); // ← tambah ini
+        $latestProducts   = Product::latest()->take(5)->get();
+        $avgPrice         = Product::avg('price');
+        $bestSeller       = Product::first()?->name;
+        return view('admin.dashboard', compact(
+            'totalProducts', 'activeProducts', 'inactiveProducts',
+            'latestProducts', 'avgPrice', 'bestSeller'
+        ));
     }
-
     public function index()
     {
         $products      = Product::latest()->paginate(10);
