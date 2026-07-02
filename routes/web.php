@@ -9,6 +9,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminProductController;
+use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Middleware\AdminAuth;
 
 // ===== LANGUAGE =====
@@ -32,10 +33,11 @@ Route::post('/checkout',             [CheckoutController::class, 'store'  ])->na
 Route::get('/checkout/success/{id}', [CheckoutController::class, 'success'])->name('checkout.success');
 
 // ===== ADMIN =====
-// Redirect /admin ke /admin/login
+// Redirect /admin to /admin/login
 Route::get('/admin', function() {
     return redirect()->route('admin.login');
 });
+
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('login',   [AdminAuthController::class, 'showLogin'])->name('login');
     Route::post('login',  [AdminAuthController::class, 'login'    ])->name('login.post');
@@ -44,6 +46,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware(AdminAuth::class)->group(function () {
         Route::get('dashboard', [AdminProductController::class, 'dashboard'])->name('dashboard');
         Route::resource('products', AdminProductController::class)->names('products');
+        Route::get('orders', [AdminOrderController::class, 'index'])->name('orders.index');
+        Route::get('orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
+        Route::patch('orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.status');
     });
     Route::get('/reset-pw-temp', function() {
         $user = \App\Models\Admin::first();
