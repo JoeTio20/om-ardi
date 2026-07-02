@@ -32,6 +32,10 @@ Route::post('/checkout',             [CheckoutController::class, 'store'  ])->na
 Route::get('/checkout/success/{id}', [CheckoutController::class, 'success'])->name('checkout.success');
 
 // ===== ADMIN =====
+// Redirect /admin ke /admin/login
+Route::get('/admin', function() {
+    return redirect()->route('admin.login');
+});
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('login',   [AdminAuthController::class, 'showLogin'])->name('login');
     Route::post('login',  [AdminAuthController::class, 'login'    ])->name('login.post');
