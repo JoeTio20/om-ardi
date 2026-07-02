@@ -33,6 +33,17 @@ class CartController extends Controller
         }
 
         session(['cart' => $cart]);
+        $count = collect($cart)->sum('qty');
+
+        // Kalau fetch/AJAX → balas JSON
+        if ($request->wantsJson() || $request->ajax() || $request->header('Content-Type') === 'application/json') {
+            return response()->json([
+                'success' => true,
+                'message' => 'Ditambahkan ke keranjang!',
+                'count'   => $count,
+            ]);
+        }
+
         return back()->with('cart_success', 'Produk ditambahkan ke keranjang!');
     }
 
