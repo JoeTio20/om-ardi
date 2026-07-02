@@ -26,9 +26,13 @@ body { background:#EEF2F7; font-family:"Inter",system-ui,sans-serif; margin:0; c
     <span class="serif text-[16px] font-bold text-[#0D1F3C]">Sarang Burung</span>
   </div>
   <div class="flex items-center gap-3">
-    <button class="relative">
-      <svg width="20" height="20" fill="none" stroke="#64748B" stroke-width="1.5" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
-    </button>
+    <form method="POST" action="{{ route('admin.logout') }}">
+      @csrf
+      <button type="submit" class="flex items-center gap-1.5 text-xs font-semibold text-gray-500 hover:text-red-500 transition px-3 py-2 rounded-lg hover:bg-red-50">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        Logout
+      </button>
+    </form>
     <div class="w-8 h-8 rounded-full bg-[#0D1F3C] flex items-center justify-center text-white text-xs font-bold">
       {{ strtoupper(substr(optional(auth()->user())->name??'A',0,1)) }}
     </div>
@@ -42,25 +46,13 @@ body { background:#EEF2F7; font-family:"Inter",system-ui,sans-serif; margin:0; c
 
 <!-- BOTTOM NAV -->
 <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 flex z-40" style="padding-bottom:env(safe-area-inset-bottom)">
-  <a href="{{ route('admin.dashboard') }}" class="bnav-item {{ request()->routeIs('admin.dashboard')?'active':'' }}">
+  <a href="{{ route('admin.dashboard') }}" class="bnav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
     <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
     HOME
-  </a>
-  <a href="{{ route('admin.products.index') }}" class="bnav-item {{ request()->routeIs('admin.products.*')?'active':'' }}">
-    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
-    STOCK
   </a>
   <a href="{{ route('admin.orders.index') }}" class="bnav-item {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">
     <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
     ORDERS
-  </a>
-  <a href="#" class="bnav-item">
-    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M17 20h5v-2a4 4 0 00-5-3.87M9 20H4v-2a4 4 0 015-3.87M16 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-    CLIENTS
-  </a>
-  <a href="#" class="bnav-item">
-    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
-    MISC
   </a>
 </nav>
 
